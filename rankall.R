@@ -26,21 +26,24 @@ rankall <- function(outcome, num = "best")
     #Function returns the hospital name for the given state at the specified rank.
     get.state.hospital.data <- function(target.state) 
       {
-          outcome.data.state <- subset(outcome.data.sorted, outcome.data.sorted$state == target.state, c(1:3))
+        # subset the larger data frame by the target state  
+        outcome.data.state <- subset(outcome.data.sorted, outcome.data.sorted$state == target.state, c(1:3))
+        
+        # order the data frame by the value column
+        outcome.data.state <- outcome.data.state[order(outcome.data.state[, 3]), ]
+        
+        # translate non-numeric "best" and "worst" values to 1 or the number of rows in the dataframe
+        if(is.numeric(num) == FALSE)
+        {
+          if(num == "best") {num <- 1}
           
-          outcome.data.state <- outcome.data.state[order(outcome.data.state[, 3]), ]
-          
-          # translate non-numeric "best" and "worst" values to 1 or the number of rows in the dataframe
-          if(is.numeric(num) == FALSE)
-          {
-            if(num == "best") {num <- 1}
-            
-            if(num == "worst") {num <- nrow(outcome.data.sorted)}
-          }
-          
-          outcome.data.state <- data.frame(outcome.data.state[num, c(1:2)])
-          
-          return(outcome.data.state)
+          if(num == "worst") {num <- nrow(outcome.data.sorted)}
+        }
+        
+        # return the row corresponding to the rank, with the hospital name and state columns only
+        outcome.data.state <- data.frame(outcome.data.state[num, c(1:2)])
+        
+        return(outcome.data.state)
       }
     
     # validate outcome against valid outcome vector
@@ -73,6 +76,7 @@ rankall <- function(outcome, num = "best")
     # a list of data frames is returned; reduce down to a simple data frame with do.call and rbind()
     outcome.data.return <- do.call("rbind", outcome.data.final)
     
+    # get rid of the row names
     row.names(outcome.data.return) <- NULL
     
     return(outcome.data.return)
