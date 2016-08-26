@@ -19,13 +19,9 @@ rankall <- function(outcome, num = "best")
   {
     # create and initialize all variables
     outcome.data.final <- NULL
-    #outcome.data.final <- data.frame(name=character(), state=character(), stringsAsFactors=FALSE)  # return data frame
 
     # create and initialize the state vector
     state_vector <- as.vector(state.abb)
-    
-    # redefine column names for readability
-    #names(outcome.data.final) <- c("name","state")
 
     #Function returns the hospital name for the given state at the specified rank.
     get.state.hospital.data <- function(target.state) 
@@ -76,6 +72,8 @@ rankall <- function(outcome, num = "best")
     
     # a list of data frames is returned; reduce down to a simple data frame with do.call and rbind()
     outcome.data.return <- do.call("rbind", outcome.data.final)
+    
+    row.names(outcome.data.return) <- NULL
     
     return(outcome.data.return)
   }
