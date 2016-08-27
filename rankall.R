@@ -1,5 +1,5 @@
 # |*****************************************************************************
-# | Dwayne Macadangdang 8/25/2016
+# | Dwayne Macadangdang 8/26/2016
 # | Week 4 Programming Assignment #3.4
 
 # | Write a function called rankall that takes two arguments: an outcome name (outcome) 
@@ -57,10 +57,10 @@ rankall <- function(outcome, num = "best")
     # read data from file
     outcome.filedata <- read.csv("outcome-of-care-measures.csv", na.strings = "Not Available", stringsAsFactors = FALSE)
     
-    # get subset of data for selected state, getting only columns 2, 7, 11, 17, 23
+    # get subset of data, getting only columns 2, 7, 11, 17, 23
     outcome.temp.data <- outcome.filedata[, c(2, 7, 11, 17, 23)]
     
-    # determine target column from outcome vector
+    # determine target column from outcome vector argument
     my_column <- as.numeric(switch(outcome, "heart attack" = 3, "heart failure" = 4, "pneumonia" = 5))
     
     #reduce the data frame to necessary columns and and filter out rows with "NA"
@@ -68,11 +68,13 @@ rankall <- function(outcome, num = "best")
     outcome.filter <- complete.cases(outcome.subset.data)
     outcome.data <- outcome.subset.data[outcome.filter, ]
     
+    # redefine the final column names
     names(outcome.data) <- c("name","state","value")
     
+    # sort the data frame on the state column [2] with the order() function
     outcome.data.sorted <- outcome.data[order(outcome.data[,2]), ]
                                      
-    # call the get.state.hospital.data() function
+    # call the get.state.hospital.data() function using lapply()
     outcome.data.final <- lapply(state_vector, get.state.hospital.data) 
     
     # a list of data frames is returned; reduce down to a simple data frame with do.call and rbind()
