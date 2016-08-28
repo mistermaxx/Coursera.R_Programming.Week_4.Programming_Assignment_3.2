@@ -34,12 +34,16 @@ rankall <- function(outcome, num = "best")
         # order the data frame by the value column
         outcome.data.state <- outcome.data.state[order(outcome.data.state[, 3]), ]
         
+        # added 8/28 for sequential count of row indexes for current state
+        row.names(outcome.data.state) <- NULL
+        
         # translate non-numeric "best" and "worst" values to 1 or the number of rows in the dataframe
         if(is.numeric(num) == FALSE)
         {
           if(num == "best") {num <- 1}
           
-          if(num == "worst") {num <- nrow(outcome.data.sorted)}
+          # 8/28 edited for correct data frame
+          if(num == "worst") {num <- nrow(outcome.data.state)}
         }
         
         # return the row corresponding to the rank, with the hospital name and state columns only
