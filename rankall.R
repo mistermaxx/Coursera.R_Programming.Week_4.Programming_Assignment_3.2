@@ -69,7 +69,7 @@ rankall <- function(outcome, num = "best")
     outcome.data <- outcome.subset.data[outcome.filter, ]
     
     # redefine the final column names
-    names(outcome.data) <- c("name","state","value")
+    names(outcome.data) <- c("hospital","state","value")
     
     # sort the data frame on the state column [2] with the order() function
     outcome.data.sorted <- outcome.data[order(outcome.data[,2]), ]
